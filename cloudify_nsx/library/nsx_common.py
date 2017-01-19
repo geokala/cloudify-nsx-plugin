@@ -206,6 +206,7 @@ def get_properties_and_validate(name, kwargs, validate_dict=None):
     if not validate_dict:
         _, validate_dict = get_properties('validate_' + name, kwargs)
     else:
+        _, validate_example = get_properties('validate_' + name, kwargs)
         ctx.logger.info("Used predefined rules %s: %s" % (
             name, str(validate_dict))
         )

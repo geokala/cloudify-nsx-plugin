@@ -456,39 +456,12 @@ node_types:
           uplink_subnet: ""
           # New dlr default gateway
           uplink_dgw: ""
-      validate_firewall:
-        default:
-          action:
-            default: accept
-          logging:
-            default: false
-            type: boolean
       firewall:
         default:
           # accept or deny
           action: accept
           # true or false
           logging: false
-      validate_dhcp:
-        default:
-          enabled:
-            default: true
-            type: boolean
-          syslog_enabled:
-            default: false
-            type: boolean
-          syslog_level:
-            default: INFO
-            caseinsensitive: true
-            values:
-              - EMERGENCY
-              - ALERT
-              - CRITICAL
-              - ERROR
-              - WARNING
-              - NOTICE
-              - INFO
-              - DEBUG
       dhcp:
         default:
           # True/False The desired state of the DHCP Server
@@ -497,47 +470,6 @@ node_types:
           syslog_enabled: false
           # The logging level for DHCP on this Edge (INFO/WARNING/etc.)
           syslog_level: INFO
-      validate_routing:
-        default:
-          enabled:
-            default: true
-            type: boolean
-          staticRouting:
-            set_none: true
-            sub:
-              defaultRoute:
-                set_none: true
-                sub:
-                  gatewayAddress:
-                    set_none: true
-                  vnic:
-                    set_none: true
-                  mtu:
-                    set_none: true
-          routingGlobalConfig:
-            sub:
-              routerId:
-                set_none: true
-              ecmp:
-                default: false
-                type: boolean
-              logging:
-                sub:
-                  logLevel:
-                    default: INFO
-                    caseinsensitive: true
-                    values:
-                      - EMERGENCY
-                      - ALERT
-                      - CRITICAL
-                      - ERROR
-                      - WARNING
-                      - NOTICE
-                      - INFO
-                      - DEBUG
-                enable:
-                   default: false
-                   type: boolean
       routing:
         default:
           enabled: true
@@ -561,24 +493,6 @@ node_types:
               enable: false
             # Optional. Defaults to false.
             ecmp: false
-      validate_ospf:
-        default:
-          enabled:
-            default: false
-            type: boolean
-          defaultOriginate:
-            default: false
-            type: boolean
-          gracefulRestart:
-            default: false
-            type: boolean
-          redistribution:
-            default: false
-            type: boolean
-          protocolAddress:
-            set_none: true
-          forwardingAddress:
-            set_none: true
       # Only one of (OSPF/BGP) can be configured as the dynamic routing
       # protocol for Logical Router.
       ospf:
@@ -600,23 +514,6 @@ node_types:
           # ipAddress on the same subnet as the forwardingAddress,
           # only for enabled and use logical switch as ospf
           forwardingAddress: ""
-      validate_bgp:
-        default:
-          enabled:
-            default: false
-            type: boolean
-          defaultOriginate:
-            default: false
-            type: boolean
-          gracefulRestart:
-            default: false
-            type: boolean
-          redistribution:
-            default: false
-            type: boolean
-          localAS:
-            type: string
-            set_none: true
       # Only one of (OSPF/BGP) can be configured as the dynamic routing
       # protocol for Logical Router.
       bgp:
@@ -769,29 +666,6 @@ node_types:
       # resource nsx id
       resource_id:
         required: false
-      validate_neighbour:
-        default:
-          dlr_id:
-            required: true
-          ipAddress:
-            required: true
-          remoteAS:
-            required: true
-          forwardingAddress:
-            required: true
-          protocolAddress:
-            required: true
-          weight:
-            type: string
-            default: 60
-          holdDownTimer:
-            type: string
-            default: 180
-          keepAliveTimer:
-            type: string
-            default: 60
-          password:
-            set_none: true
       neighbour:
         default:
           # dlr uuid
@@ -817,7 +691,7 @@ node_types:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.create
+          implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.create_dlr
         delete:
           implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.delete
 
@@ -1122,39 +996,6 @@ node_types:
       # resource nsx id
       resource_id:
         required: false
-      validate_edge:
-        default:
-          # we need name in any case of usage except predefined 'id'
-          name:
-            required: true
-            external_use: false
-          esg_pwd:
-            required: true
-            external_use: false
-          esg_size:
-            default: compact
-            values:
-              - compact
-              - large
-              - quadlarge
-              - xlarge
-          datacentermoid:
-            required: true
-            external_use: false
-          datastoremoid:
-            required: true
-            external_use: false
-          resourcepoolid:
-            required: true
-            external_use: false
-          default_pg:
-            required: true
-            external_use: false
-          esg_username:
-           default: admin
-          esg_remote_access:
-           default: false
-           type: boolean
       edge:
         default:
           # The name of the ESG to be created
@@ -1176,38 +1017,12 @@ node_types:
           esg_username: admin
           # Enables / Disables SSH access to the Edge Host (default: False)
           esg_remote_access: false
-      validate_firewall:
-        default:
-          action:
-            default: accept
-          logging:
-            default: false
-            type: boolean
       firewall:
         default:
           # accept or deny
           action: accept
           # true or false
           logging: false
-      validate_dhcp:
-        default:
-          enabled:
-            default: true
-            type: boolean
-          syslog_enabled:
-            default: false
-            type: boolean
-          syslog_level:
-            default: INFO
-            values:
-              - EMERGENCY
-              - ALERT
-              - CRITICAL
-              - ERROR
-              - WARNING
-              - NOTICE
-              - INFO
-              - DEBUG
       dhcp:
         default:
           # True/False The desired state of the DHCP Server
@@ -1216,56 +1031,10 @@ node_types:
           syslog_enabled: false
           # The logging level for DHCP on this Edge (INFO/WARNING/etc.)
           syslog_level: INFO
-      validate_nat:
-        default:
-          enabled:
-            default: true
-            type: boolean
       nat:
         default:
           # The display name of a Edge Service Gateway used for NAT
           enabled: true
-      validate_routing:
-        default:
-          enabled:
-            default: true
-            type: boolean
-          staticRouting:
-            set_none: true
-            sub:
-              defaultRoute:
-                set_none: true
-                sub:
-                  gatewayAddress:
-                    set_none: true
-                  vnic:
-                    set_none: true
-                  mtu:
-                    set_none: true
-          routingGlobalConfig:
-            sub:
-              routerId:
-                set_none: true
-              ecmp:
-                default: false
-                type: boolean
-              logging:
-                sub:
-                 logLevel:
-                    default: INFO
-                    caseinsensitive: true
-                    values:
-                      - EMERGENCY
-                      - ALERT
-                      - CRITICAL
-                      - ERROR
-                      - WARNING
-                      - NOTICE
-                      - INFO
-                      - DEBUG
-                enable:
-                   default: false
-                   type: boolean
       routing:
         default:
           enabled: true
@@ -1289,20 +1058,6 @@ node_types:
               enable: false
             # Optional. Defaults to false.
             ecmp: false
-      validate_ospf:
-        default:
-          enabled:
-            default: false
-            type: boolean
-          defaultOriginate:
-            default: false
-            type: boolean
-          gracefulRestart:
-            default: false
-            type: boolean
-          redistribution:
-            default: false
-            type: boolean
       ospf:
         default:
           # When not specified, it will be treated as false, When false,
@@ -1317,23 +1072,6 @@ node_types:
           # Optional. Defaults to false.
           redistribution: false
           # ForwardingAddress and protocolAddress are not usable for edge
-      validate_bgp:
-        default:
-          enabled:
-            default: false
-            type: boolean
-          defaultOriginate:
-            default: false
-            type: boolean
-          gracefulRestart:
-            default: false
-            type: boolean
-          redistribution:
-            default: false
-            type: boolean
-          localAS:
-            type: string
-            set_none: true
       # Only one of (OSPF/BGP) can be configured as the dynamic routing
       # protocol for Logical Router.
       bgp:
@@ -1372,25 +1110,6 @@ node_types:
       # resource nsx id
       resource_id:
         required: false
-      validate_neighbour:
-        default:
-          dlr_id:
-            required: true
-          ipAddress:
-            required: true
-          remoteAS:
-            required: true
-          weight:
-            type: string
-            default: 60
-          holdDownTimer:
-            type: string
-            default: 180
-          keepAliveTimer:
-            type: string
-            default: 60
-          password:
-            set_none: true
       neighbour:
         default:
           # dlr uuid
@@ -1410,7 +1129,7 @@ node_types:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.create
+          implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.create_esg
         delete:
           implementation: nsx.cloudify_nsx.network.dlr_bgp_neighbour.delete
 
